@@ -1,12 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Список</title>
-</head>
-<body>
+{% extends "default.html" %}
+
+{% block title %}Список{% endblock title %}
+
+{% block content %}
 {% for post in object_list %}
 <a href="posts/{{post.pk}}">{{ post }}</a><br>
 {% endfor %}
-</body>
-</html>
+<br>
+<a href="posts/create">Создать</a>
+{% endblock content %}

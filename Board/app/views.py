@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, CreateView
 
 from .models import Post, Category, Comment
 
@@ -19,6 +19,10 @@ class PostView(DetailView):
         context['comments'] = Comment.objects.select_related('post').filter(post=context['object'])
         return context
 
+
+class PostCreate(CreateView):
+    model = Post
+    template_name = "app/create_post.html"
 
 def index_view(request):
     Category.standard_values()
