@@ -5,9 +5,16 @@
 {% endblock title %}
 
 {% block content %}
+<h1>{{ object.title }}</h1>
+<br>
+<br>
 {% autoescape off %}
 {{ object.content | safe }}
 {% endautoescape %}
+<br>
+<br>
+<a href="{{ object.pk }}/edit">Редактировать</a>
+<a href="{{ object.pk }}/delete">Удалить</a>
 <br>
 <br>
 {% for comment in comments %}
