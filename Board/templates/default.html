@@ -31,7 +31,11 @@
                            <a class="nav-link" href="{% url 'post_list' %}">Объявления</a>
                        </li>
                        <li class="nav-item">
-                           <a class="nav-link" href="{% logsystem_url %}">{% logsystem_text %}</a>
+                           {% if user.is_authenticated %}
+                               <a class="nav-link" href="logout">Выйти</a>
+                           {% else %}
+                               <a class="nav-link" href="login">Войти</a>
+                           {% endif %}
                        </li>
                    </ul>
                </div>

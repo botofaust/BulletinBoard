@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect
-from django.contrib.auth import logout
+from django.contrib.auth import logout, login, authenticate
 
 from .forms import NewPostForm, NewCommentForm
 from .models import Post, Comment
@@ -68,4 +68,13 @@ def logout_view(request):
         return render(request, 'logout.html')
     else:
         logout(request)
+        return HttpResponseRedirect(reverse('index'))
+
+
+def login_view(request):
+    if request.method == 'GET':
+        return render(request, 'login.html')
+    else:
+        user = authenticate(username=request.POST['user'], password=request.POST['password'])
+        login(request, user)
         return HttpResponseRedirect(reverse('index'))

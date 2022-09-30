@@ -12,19 +12,22 @@
 {{ object.content | safe }}
 {% endautoescape %}
 <br>
-<br>
-<a href="{{ object.pk }}/edit">Редактировать</a>
-<a href="{{ object.pk }}/delete">Удалить</a>
-<br>
+{% if user == object.author %}
+    <br>
+    <a href="{{ object.pk }}/edit">Редактировать</a>
+    <a href="{{ object.pk }}/delete">Удалить</a>
+    <br>
+{% endif %}
 <br>
 {% for comment in comments %}
-{{ comment.created_on }}
-{% if comment.created_on != comment.updated_on %}
-(изменено {{ comment.updated_on }})
-{% endif %} <br>
-Автор: {{ comment.author }} <br>
-{{ comment.content }} <br>
-<br>
+    {{ comment.created_on }}
+    {% if comment.created_on != comment.updated_on %}
+        (изменено {{ comment.updated_on }})
+    {% endif %}
+    <br>
+    Автор: {{ comment.author }} <br>
+    {{ comment.content }} <br>
+    <br>
 {% endfor %}
 <br>
 <form action="" method="post">
