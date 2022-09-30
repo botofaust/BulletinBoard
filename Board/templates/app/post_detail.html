@@ -18,8 +18,18 @@
 <br>
 <br>
 {% for comment in comments %}
-comment {{ comment.pk }} <br>
-author: {{ comment.author }} <br>
+{{ comment.created_on }}
+{% if comment.created_on != comment.updated_on %}
+(изменено {{ comment.updated_on }})
+{% endif %} <br>
+Автор: {{ comment.author }} <br>
 {{ comment.content }} <br>
+<br>
 {% endfor %}
+<br>
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Ответить">
+</form>
 {% endblock content %}

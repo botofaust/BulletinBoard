@@ -1,11 +1,46 @@
 <!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>{% block title %}{% endblock title %}</title>
-</head>
-<body>
-{% block content %}
-{% endblock content %}
-</body>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="for SkillFactory" />
+        <meta name="author" content="botofaust" />
+        <title>
+            {% block title %}
+            {% endblock title %}
+        </title>
+        {% load static %}
+        <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+    </head>
+    <body>
+        <!-- Responsive navbar-->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+           <div class="container">
+               <button class="navbar-toggler" type="button" data-toggle="collapse"
+                       data-target="#navbarResponsive"
+                       aria-controls="navbarResponsive" aria-expanded="false"
+                       aria-label="Toggle navigation">
+                   <span class="navbar-toggler-icon"></span>
+               </button>
+               <div class="collapse navbar-collapse" id="navbarResponsive">
+                   <ul class="navbar-nav ml-auto">
+                       <li class="nav-item">
+                           <a class="nav-link" target="_blank" href="/admin">Администрирование</a>
+                       </li>
+                       <li class="nav-item">
+                           <a class="nav-link" href="{% url 'post_list' %}">Объявления</a>
+                       </li>
+                       <li class="nav-item">
+                           <a class="nav-link" href="{% logsystem_url %}">{% logsystem_text %}</a>
+                       </li>
+                   </ul>
+               </div>
+           </div>
+        </nav>
+        <!-- Page content-->
+        <div class="container">
+             {% block content %}
+             {% endblock content %}
+        </div>
+    </body>
 </html>
