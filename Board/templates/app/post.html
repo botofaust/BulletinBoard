@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ object.title }}</title>
+</head>
+<body>
+
+{% autoescape off %}
+{{ object.content | safe }}
+{% endautoescape %}
+<br>
+<br>
+{% for comment in comments %}
+comment {{ comment.pk }} <br>
+author: {{ comment.author }} <br>
+{{ comment.content }} <br>
+{% endfor %}
+</body>
+</html>
