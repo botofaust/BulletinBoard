@@ -13,11 +13,11 @@
 {% endautoescape %}
 <br>
 {% if user == object.author %}
-    <br>
-    <a href="{{ object.pk }}/edit">Редактировать</a>
-    <a href="{{ object.pk }}/delete">Удалить</a>
-    <br>
-{% endif %}
+<br>
+<a href="{{ object.pk }}/edit">Редактировать</a>
+<a href="{{ object.pk }}/delete">Удалить</a>
+<br>
+<h3>Комментарии:</h3>
 <br>
 {% for comment in comments %}
     {{ comment.created_on }}
@@ -27,8 +27,16 @@
     <br>
     Автор: {{ comment.author }} <br>
     {{ comment.content }} <br>
+    {% if comment.accepted %}
+    <b>Предложение принято</b>
+    {% else %}
+    <a href="{% url 'accept_comment' comment.pk %}">Принять</a>
+    {% endif %}
+    <a href="{% url 'delete_comment' comment.pk %}">Удалить</a>
+    <br>
     <br>
 {% endfor %}
+{% endif %}
 <br>
 <form action="" method="post">
     {% csrf_token %}

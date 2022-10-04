@@ -3,5 +3,5 @@
 {% block title %}Index{% endblock title %}
 
 {% block content %}
-<a href="posts">Список</a>
+Добро пожаловать, {% if user.is_authenticated %} {{user.username}} {% else %} Гость {% endif %}
 {% endblock content %}

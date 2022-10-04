@@ -11,3 +11,6 @@ class PostAdmin(SummernoteModelAdmin):
 admin.site.register(Post, PostAdmin)
 admin.site.register(Category)
 admin.site.register(Comment)
+
+
+from . import signals

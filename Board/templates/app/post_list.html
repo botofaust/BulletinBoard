@@ -3,9 +3,19 @@
 {% block title %}Список{% endblock title %}
 
 {% block content %}
+
+<form action="" method="get">
+    {{ filterset.form }}
+    <input type="submit" value="Найти" />
+</form>
+<br>
+{% if not object_list.exists %}
+Нет объявлений<br>
+{% endif %}
+
 {% for post in object_list %}
 <a href="posts/{{post.pk}}">{{ post }}</a><br>
 {% endfor %}
 <br>
-<a href="posts/create">Создать</a>
+<a href="posts/create{% if request.GET.category %}?category={{request.GET.category}}{% endif %}">Создать</a>
 {% endblock content %}

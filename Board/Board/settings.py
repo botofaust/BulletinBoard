@@ -32,6 +32,7 @@ INSTALLED_APPS = [
 
     'app',
     'django_summernote',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -144,3 +145,7 @@ EMAIL_HOST = env('EMAIL_HOST')
 EMAIL_PORT = env('EMAIL_PORT')
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+
+# Конфигурация сайта
+
+SITE_ID = 1
