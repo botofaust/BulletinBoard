@@ -6,37 +6,46 @@
 
 {% block content %}
 <h1>{{ object.title }}</h1>
-<br>
-<br>
-{% autoescape off %}
-{{ object.content | safe }}
-{% endautoescape %}
+<div style="border: 1px solid #000; padding: 3px 3px 0 3px;">
+    {% autoescape off %}
+    {{ object.content | safe }}
+    {% endautoescape %}
+</div>
+{{ object.created_on }} <br>
+Автор объявления: {{ object.author }} <br>
+{% if object.created_on != object.updated_on %}
+    (изменено {{ object.updated_on }})
+{% endif %}
 <br>
 {% if user == object.author %}
-<br>
-<a href="{{ object.pk }}/edit">Редактировать</a>
-<a href="{{ object.pk }}/delete">Удалить</a>
+    <a href="{{ object.pk }}/edit">Редактировать</a>
+    <a href="{{ object.pk }}/delete">Удалить</a>
+{% endif %}<br>
 <br>
 <h3>Комментарии:</h3>
 <br>
 {% for comment in comments %}
-    {{ comment.created_on }}
-    {% if comment.created_on != comment.updated_on %}
-        (изменено {{ comment.updated_on }})
+    {% if user == object.author or user == comment.author %}
+        <div style="border: 1px solid #000; width: 25%; padding: 3px 3px 0 3px;">
+            {{ comment.content }}</div>
+        {{ comment.created_on }} <br>
+        Автор комментария: {{ comment.author }} <br>
+        {% if comment.created_on != comment.updated_on %}
+            (изменено {{ comment.updated_on }})
+        {% endif %}
+        <br>
+        {% if user == object.author %}
+            {% if comment.accepted %}
+                <b>Предложение принято</b>
+            {% else %}
+                <a href="{% url 'accept_comment' comment.pk %}">Принять</a>
+            {% endif %}
+        {% endif %}
+        <a href="{% url 'delete_comment' comment.pk %}">Удалить</a>
+        <br>
+        <br>
     {% endif %}
-    <br>
-    Автор: {{ comment.author }} <br>
-    {{ comment.content }} <br>
-    {% if comment.accepted %}
-    <b>Предложение принято</b>
-    {% else %}
-    <a href="{% url 'accept_comment' comment.pk %}">Принять</a>
-    {% endif %}
-    <a href="{% url 'delete_comment' comment.pk %}">Удалить</a>
-    <br>
-    <br>
 {% endfor %}
-{% endif %}
 <br>
 <form action="" method="post">
     {% csrf_token %}

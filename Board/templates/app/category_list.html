@@ -1,0 +1,22 @@
+{% extends "default.html" %}
+
+{% block title %}Категории{% endblock title %}
+
+{% block content %}
+<table>
+{% for category in object_list %}
+    <tr>
+        <td>
+            <a href="{% url 'post_list' %}?category={{ category.pk }}">{{ category }}</a>
+        </td>
+        <td>
+            {% if user.pk in category.get_subscribers_id %}
+                <a href="{% url 'category_unsubscribe' category.pk %}">Отписаться</a>
+            {% else %}
+                <a href="{% url 'category_subscribe' category.pk %}">Подписаться</a>
+            {% endif %}
+        </td>
+    </tr>
+{% endfor %}
+</table>
+{% endblock content %}

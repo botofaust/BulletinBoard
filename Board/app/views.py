@@ -1,4 +1,5 @@
-from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
@@ -6,13 +7,13 @@ from django.http import HttpResponseRedirect
 
 from .filters import PostFilter
 from .forms import NewPostForm, NewCommentForm
-from .models import Post, Comment
+from .models import Post, Comment, Category
+from .tasks import sent_email_about_accept
 
 
 class PostList(ListView):
     model = Post
     template_name = 'app/post_list.html'
-    paginate_by = 10
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -73,10 +74,20 @@ class PostDelete(PermissionRequiredMixin, DeleteView):
     success_url = reverse_lazy('post_list')
 
 
+class CategoryList(LoginRequiredMixin, ListView):
+    model = Category
+    template_name = 'app/category_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+
 def index_view(request):
     return render(request, 'index.html')
 
 
+@login_required
 def accept_comment(request, pk):
     if request.method != 'GET':
         return HttpResponseRedirect(reverse('index'))
@@ -88,9 +99,11 @@ def accept_comment(request, pk):
     else:
         comment.accepted = True
         comment.save()
+        sent_email_about_accept.delay(comment.pk)
     return HttpResponseRedirect(reverse('post_detail', kwargs={'pk': comment.post.pk}))
 
 
+@login_required
 def delete_comment(request, pk):
     if request.method != 'GET':
         return HttpResponseRedirect(reverse('index'))
@@ -103,3 +116,31 @@ def delete_comment(request, pk):
         post_pk = comment.post.pk
         comment.delete()
     return HttpResponseRedirect(reverse('post_detail', kwargs={'pk': post_pk}))
+
+
+@login_required
+def category_subscribe(request, pk):
+    if request.method != 'GET':
+        return HttpResponseRedirect(reverse('index'))
+    try:
+        category = Category.objects.get(pk=pk)
+    except Category.DoesNotExist:
+        return HttpResponseRedirect(reverse('index'))
+        # тут бы надо в secure написать
+    else:
+        category.subscribe(request.user)
+    return HttpResponseRedirect(reverse('category_list'))
+
+
+@login_required
+def category_unsubscribe(request, pk):
+    if request.method != 'GET':
+        return HttpResponseRedirect(reverse('index'))
+    try:
+        category = Category.objects.get(pk=pk)
+    except Category.DoesNotExist:
+        return HttpResponseRedirect(reverse('index'))
+        # тут бы надо в secure написать
+    else:
+        category.unsubscribe(request.user)
+    return HttpResponseRedirect(reverse('category_list'))
